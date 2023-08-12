@@ -12,7 +12,7 @@
     "rest",
     "api"
   ],
-  "repository": "",
+  "repository": "https://github.com/kzquandary/Bookshelf-api",
   "author": "Nur Faid Prasetyo",
   "license": "MIT",
   "dependencies": {
