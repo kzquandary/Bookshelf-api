@@ -1,0 +1,25 @@
+{
+  "name": "submission",
+  "version": "1.0.0",
+  "description": "Bookshelf API untuk submission Project Akhir Dicoding - Nur Faid Prasetyo C381BSY4081",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": [
+    "hapi",
+    "bookshelf",
+    "rest",
+    "api"
+  ],
+  "repository": "",
+  "author": "Nur Faid Prasetyo",
+  "license": "MIT",
+  "dependencies": {
+    "@hapi/hapi": "^21.3.2",
+    "nanoid": "^3.3.6"
+  },
+  "devDependencies": {
+    "eslint": "^8.47.0"
+  }
+}

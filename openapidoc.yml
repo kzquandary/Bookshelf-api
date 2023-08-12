@@ -1,0 +1,211 @@
+openapi: 3.1.0
+info:
+  title: Bookshelf API
+  version: 1.0.0
+paths:
+  /books:
+    post:
+      summary: Add a new book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookInput'
+      responses:
+        '201':
+          description: Book successfully added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    get:
+      summary: Get filtered list of books
+      parameters:
+        - $ref: '#/components/parameters/NameFilter'
+        - $ref: '#/components/parameters/ReadingFilter'
+        - $ref: '#/components/parameters/FinishedFilter'
+      responses:
+        '200':
+          description: List of books successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilteredBooksResponse'
+  /books/{bookId}:
+    get:
+      summary: Get details of a specific book
+      parameters:
+        - $ref: '#/components/parameters/BookIdPathParam'
+      responses:
+        '200':
+          description: Book details successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDetailResponse'
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Update details of a specific book
+      parameters:
+        - $ref: '#/components/parameters/BookIdPathParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookInput'
+      responses:
+        '200':
+          description: Book successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Delete a specific book
+      parameters:
+        - $ref: '#/components/parameters/BookIdPathParam'
+      responses:
+        '200':
+          description: Book successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    BookInput:
+      type: object
+      properties:
+        name:
+          type: string
+        year:
+          type: integer
+        author:
+          type: string
+        summary:
+          type: string
+        publisher:
+          type: string
+        pageCount:
+          type: integer
+        readPage:
+          type: integer
+        reading:
+          type: boolean
+      required:
+        - name
+        - pageCount
+        - readPage
+        - reading
+    SuccessResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            bookId:
+              type: string
+    FilteredBooksResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: object
+          properties:
+            books:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  publisher:
+                    type: string
+    BookDetailResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: object
+          properties:
+            book:
+              $ref: '#/components/schemas/BookInput'
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+  parameters:
+    BookIdPathParam:
+      name: bookId
+      in: path
+      required: true
+      schema:
+        type: string
+      description: ID of the book
+    NameFilter:
+      name: name
+      in: query
+      schema:
+        type: string
+      description: Filter books by name
+    ReadingFilter:
+      name: reading
+      in: query
+      schema:
+        type: string
+      description: Filter books by reading status
+    FinishedFilter:
+      name: finished
+      in: query
+      schema:
+        type: string
+      description: Filter books by finished status
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
